@@ -28,11 +28,11 @@ export async function createScenarioToReturnOneRecommendation() {
 }
 
 export async function createScenarioToDeleteWithDownvote() {
-	const recommendation = await createScenarioToReturnOneRecommendation();
+	const recommendation = await recommendationFactory();
 
-	await prisma.recommendation.create({
+	const result = await prisma.recommendation.create({
 		data: { ...recommendation, score: -5 },
 	});
 
-	return recommendation;
+	return result;
 }

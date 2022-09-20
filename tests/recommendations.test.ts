@@ -6,6 +6,7 @@ import { recommendationFactory } from "./factories/recommendationFactory";
 import {
 	createScenarioToReturnRecommendations,
 	createScenarioToReturnOneRecommendation,
+	createScenarioToDeleteWithDownvote,
 } from "./factories/scenarioFactory";
 
 beforeEach(async () => {
@@ -143,6 +144,21 @@ describe("Test /Post on recommendations downvote", () => {
 
 		expect(result.status).toBe(200);
 		expect(recommendationDownvoted.score).toBeLessThan(0);
+	});
+
+	it("return 200 with valid id and delete recommendation with less than -5 score", async () => {
+		const recommendation = await createScenarioToDeleteWithDownvote();
+
+		const result = await server
+			.post(`/recommendations/${recommendation.id}/downvote`)
+			.send();
+
+		const isRecommendationDeleted = await prisma.recommendation.findUnique({
+			where: { id: recommendation.id },
+		});
+
+		expect(result.status).toBe(200);
+		expect(isRecommendationDeleted).toBeNull();
 	});
 });
 
