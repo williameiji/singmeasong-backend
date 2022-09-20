@@ -171,6 +171,15 @@ describe("Test /Post on recommendations downvote", () => {
 	});
 });
 
+describe("Test /Get recommendations random", () => {
+	it("returns 404 if there is no song", async () => {
+		const result = await server.get("/recommendations/random").send();
+
+		expect(result.status).toBe(404);
+		expect(result.body).toBeInstanceOf(Object);
+	});
+});
+
 afterAll(async () => {
 	await prisma.$disconnect();
 });
