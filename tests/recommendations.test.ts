@@ -103,6 +103,23 @@ describe("Test /Get by recommendation id", () => {
 	});
 });
 
+describe("Test /Post on recommendations upvote", () => {
+	it("returns 200 with valid id and score greater than 0", async () => {
+		const recommendation = await createScenarioToReturnOneRecommendation();
+
+		const result = await server
+			.post(`/recommendations/${recommendation.id}/upvote`)
+			.send();
+
+		const recommendationUpvoted = await prisma.recommendation.findUnique({
+			where: { id: recommendation.id },
+		});
+
+		expect(result.status).toBe(200);
+		expect(recommendationUpvoted.score).toBeGreaterThan(0);
+	});
+});
+
 afterAll(async () => {
 	await prisma.$disconnect();
 });
