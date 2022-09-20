@@ -3,6 +3,7 @@ import supertest from "supertest";
 import { prisma } from "../src/database";
 import { deleteAllData } from "./factories/scenarioFactory";
 import { recommendationFactory } from "./factories/recommendationFactory";
+import { createScenarioToReturnRecommendations } from "./factories/scenarioFactory";
 
 beforeEach(async () => {
 	await deleteAllData();
@@ -39,7 +40,7 @@ describe("Test /POST recommendation", () => {
 		expect(result.text).toBe("Recommendations names must be unique");
 	});
 
-	it("test if it returns 422 if it doesn't send a name", async () => {
+	it("test returns 422 if it doesn't send a name", async () => {
 		const newRecommendation = await recommendationFactory();
 
 		const result = await server
@@ -47,6 +48,34 @@ describe("Test /POST recommendation", () => {
 			.send({ ...newRecommendation, name: "" });
 
 		expect(result.status).toBe(422);
+	});
+
+	it("test returns 422 if you send an invalid link", async () => {
+		const newRecommendation = await recommendationFactory();
+
+		const result = await server
+			.post("/recommendations/")
+			.send({ ...newRecommendation, youtubeLink: "https://stackoverflow.com" });
+
+		expect(result.status).toBe(422);
+	});
+
+	it("test return 422 with empty body", async () => {
+		const result = await server.post("/recommendations/").send({});
+
+		expect(result.status).toBe(422);
+	});
+});
+
+describe("Test /Get recommendations", () => {
+	it("test returns 200 and array", async () => {
+		await createScenarioToReturnRecommendations();
+
+		const result = await server.get("/recommendations/").send();
+
+		expect(result.status).toBe(200);
+		expect(result.body).toBeInstanceOf(Array);
+		expect(result.body.length).not.toBeGreaterThan(10);
 	});
 });
 

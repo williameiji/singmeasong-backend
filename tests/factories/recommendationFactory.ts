@@ -1,6 +1,8 @@
+import { faker } from "@faker-js/faker";
+
 export async function recommendationFactory() {
 	return {
-		name: "EDM FESTIVAL MIX - Bigroom Electro House Party Music 2022",
+		name: faker.lorem.words(),
 		youtubeLink: "https://www.youtube.com/watch?v=EiVWPgroGso",
 	};
 }
