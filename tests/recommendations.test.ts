@@ -94,6 +94,13 @@ describe("Test /Get by recommendation id", () => {
 		expect(result.body).toBeInstanceOf(Object);
 		expect(result.body).toEqual(recommendation);
 	});
+
+	it("returns 404 with invalid id", async () => {
+		const result = await server.get("/recommendations/99999999999").send();
+
+		expect(result.status).toBe(404);
+		expect(result.text).toBe("");
+	});
 });
 
 afterAll(async () => {
