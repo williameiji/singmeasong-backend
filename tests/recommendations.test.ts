@@ -3,7 +3,10 @@ import supertest from "supertest";
 import { prisma } from "../src/database";
 import { deleteAllData } from "./factories/scenarioFactory";
 import { recommendationFactory } from "./factories/recommendationFactory";
-import { createScenarioToReturnRecommendations } from "./factories/scenarioFactory";
+import {
+	createScenarioToReturnRecommendations,
+	createScenarioToReturnOneRecommendation,
+} from "./factories/scenarioFactory";
 
 beforeEach(async () => {
 	await deleteAllData();
@@ -76,6 +79,20 @@ describe("Test /Get recommendations", () => {
 		expect(result.status).toBe(200);
 		expect(result.body).toBeInstanceOf(Array);
 		expect(result.body.length).not.toBeGreaterThan(10);
+	});
+});
+
+describe("Test /Get by recommendation id", () => {
+	it("returns 200 and array with 1 item with valid id", async () => {
+		const recommendation = await createScenarioToReturnOneRecommendation();
+
+		const result = await server
+			.get(`/recommendations/${recommendation.id}`)
+			.send();
+
+		expect(result.status).toBe(200);
+		expect(result.body).toBeInstanceOf(Object);
+		expect(result.body).toEqual(recommendation);
 	});
 });
 
