@@ -80,7 +80,7 @@ describe("Test /Get recommendations", () => {
 
 		expect(result.status).toBe(200);
 		expect(result.body).toBeInstanceOf(Array);
-		expect(result.body.length).not.toBeGreaterThan(10);
+		expect(result.body.length).toBeLessThan(11);
 	});
 });
 
@@ -187,6 +187,47 @@ describe("Test /Get recommendations random", () => {
 
 		expect(result.status).toBe(200);
 		expect(result.body).toBeInstanceOf(Object);
+	});
+});
+
+describe("Test /Get top recommendations by amount", () => {
+	it("returns 200 and array of songs with valid params", async () => {
+		await createScenarioToReturnRecommendations();
+
+		const AMOUNT = 5;
+
+		const result = await server.get(`/recommendations/top/${AMOUNT}`).send();
+
+		expect(result.status).toBe(200);
+		expect(result.body).toBeInstanceOf(Array);
+	});
+
+	it("returns 500 with invalid params", async () => {
+		await createScenarioToReturnRecommendations();
+
+		const AMOUNT = "teste";
+
+		const result = await server.get(`/recommendations/top/${AMOUNT}`).send();
+
+		expect(result.status).toBe(500);
+	});
+
+	it("returns 200 and array in the correct order", async () => {
+		await createScenarioToReturnRecommendations();
+
+		const AMOUNT = 4;
+
+		const result = await server.get(`/recommendations/top/${AMOUNT}`).send();
+
+		let isFirstItemHighScore = false;
+
+		if (result.body[0].score > result.body[1].score) {
+			isFirstItemHighScore = true;
+		}
+
+		expect(result.status).toBe(200);
+		expect(result.body).toBeInstanceOf(Array);
+		expect(isFirstItemHighScore).toBe(true);
 	});
 });
 

@@ -1,5 +1,6 @@
 import { prisma } from "../../src/database";
 import { recommendationFactory } from "./recommendationFactory";
+import { faker } from "@faker-js/faker";
 
 export async function deleteAllData() {
 	await prisma.$executeRaw`TRUNCATE TABLE recommendations`;
@@ -12,7 +13,7 @@ export async function createScenarioToReturnRecommendations() {
 		const newRecommendation = await recommendationFactory();
 
 		await prisma.recommendation.create({
-			data: newRecommendation,
+			data: { ...newRecommendation, score: Number(faker.random.numeric(3)) },
 		});
 	}
 }
