@@ -160,6 +160,15 @@ describe("Test /Post on recommendations downvote", () => {
 		expect(result.status).toBe(200);
 		expect(isRecommendationDeleted).toBeNull();
 	});
+
+	it("returns 404 with invalid id", async () => {
+		const result = await server
+			.post("/recommendations/99999999999999/downvote")
+			.send();
+
+		expect(result.status).toBe(404);
+		expect(result.text).toBe("");
+	});
 });
 
 afterAll(async () => {
