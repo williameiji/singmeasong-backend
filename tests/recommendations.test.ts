@@ -7,6 +7,7 @@ import {
 	createScenarioToReturnRecommendations,
 	createScenarioToReturnOneRecommendation,
 	createScenarioToDeleteWithDownvote,
+	createScenarioToRandomRecommendation,
 } from "./factories/scenarioFactory";
 
 beforeEach(async () => {
@@ -176,6 +177,15 @@ describe("Test /Get recommendations random", () => {
 		const result = await server.get("/recommendations/random").send();
 
 		expect(result.status).toBe(404);
+		expect(result.body).toBeInstanceOf(Object);
+	});
+
+	it("returns 200 and a object", async () => {
+		await createScenarioToRandomRecommendation();
+
+		const result = await server.get("/recommendations/random").send();
+
+		expect(result.status).toBe(200);
 		expect(result.body).toBeInstanceOf(Object);
 	});
 });

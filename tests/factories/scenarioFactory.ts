@@ -36,3 +36,16 @@ export async function createScenarioToDeleteWithDownvote() {
 
 	return result;
 }
+
+export async function createScenarioToRandomRecommendation() {
+	const recommendationHighScore = await recommendationFactory();
+	const recommendationLowScore = await recommendationFactory();
+
+	await prisma.recommendation.create({
+		data: { ...recommendationHighScore, score: 200 },
+	});
+
+	await prisma.recommendation.create({
+		data: { ...recommendationLowScore, score: 5 },
+	});
+}
