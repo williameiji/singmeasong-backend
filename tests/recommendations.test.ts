@@ -118,6 +118,32 @@ describe("Test /Post on recommendations upvote", () => {
 		expect(result.status).toBe(200);
 		expect(recommendationUpvoted.score).toBeGreaterThan(0);
 	});
+
+	it("returns 404 with invalid id", async () => {
+		const result = await server
+			.post("/recommendations/9999999999999999/upvote")
+			.send();
+
+		expect(result.status).toBe(404);
+		expect(result.text).toBe("");
+	});
+});
+
+describe("Test /Post on recommendations downvote", () => {
+	it("return 200 with valid id and score lower than 0", async () => {
+		const recommendation = await createScenarioToReturnOneRecommendation();
+
+		const result = await server
+			.post(`/recommendations/${recommendation.id}/downvote`)
+			.send();
+
+		const recommendationDownvoted = await prisma.recommendation.findUnique({
+			where: { id: recommendation.id },
+		});
+
+		expect(result.status).toBe(200);
+		expect(recommendationDownvoted.score).toBeLessThan(0);
+	});
 });
 
 afterAll(async () => {
