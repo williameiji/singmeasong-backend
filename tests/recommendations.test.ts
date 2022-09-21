@@ -172,24 +172,6 @@ describe("Test /Post on recommendations downvote", () => {
 	});
 });
 
-describe("Test /Get recommendations random", () => {
-	it("returns 404 if there is no song", async () => {
-		const result = await server.get("/recommendations/random").send();
-
-		expect(result.status).toBe(404);
-		expect(result.body).toBeInstanceOf(Object);
-	});
-
-	it("returns 200 and a object", async () => {
-		await createScenarioToRandomRecommendation();
-
-		const result = await server.get("/recommendations/random").send();
-
-		expect(result.status).toBe(200);
-		expect(result.body).toBeInstanceOf(Object);
-	});
-});
-
 describe("Test /Get top recommendations by amount", () => {
 	it("returns 200 and array of songs with valid params", async () => {
 		await createScenarioToReturnRecommendations();
@@ -228,6 +210,24 @@ describe("Test /Get top recommendations by amount", () => {
 		expect(result.status).toBe(200);
 		expect(result.body).toBeInstanceOf(Array);
 		expect(isFirstItemHighScore).toBe(true);
+	});
+});
+
+describe("Test /Get recommendations random", () => {
+	it("returns 404 if there is no song", async () => {
+		const result = await server.get("/recommendations/random").send();
+
+		expect(result.status).toBe(404);
+		expect(result.body).toBeInstanceOf(Object);
+	});
+
+	it("returns 200 and a object", async () => {
+		await createScenarioToRandomRecommendation();
+
+		const result = await server.get("/recommendations/random").send();
+
+		expect(result.status).toBe(200);
+		expect(result.body).toBeInstanceOf(Object);
 	});
 });
 
