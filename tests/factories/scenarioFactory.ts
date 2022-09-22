@@ -1,4 +1,4 @@
-import { prisma } from "../../src/database";
+import { prisma } from "../../src/database.js";
 import { recommendationFactory } from "./recommendationFactory";
 import { faker } from "@faker-js/faker";
 

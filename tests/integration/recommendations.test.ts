@@ -1,14 +1,14 @@
-import app from "../src/app";
+import app from "../../src/app";
 import supertest from "supertest";
-import { prisma } from "../src/database";
-import { deleteAllData } from "./factories/scenarioFactory";
-import { recommendationFactory } from "./factories/recommendationFactory";
+import { prisma } from "../../src/database";
+import { deleteAllData } from "../factories/scenarioFactory";
+import { recommendationFactory } from "../factories/recommendationFactory";
 import {
 	createScenarioToReturnRecommendations,
 	createScenarioToReturnOneRecommendation,
 	createScenarioToDeleteWithDownvote,
 	createScenarioToRandomRecommendation,
-} from "./factories/scenarioFactory";
+} from "../factories/scenarioFactory";
 
 beforeEach(async () => {
 	await deleteAllData();
