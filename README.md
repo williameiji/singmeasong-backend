@@ -1,6 +1,6 @@
 # <p align = "center"> SingMeASong Backend </p>
 
-Check project frontend [here](https://github.com/williameiji/repo-provas-frontend)
+Check project frontend [here](https://github.com/williameiji/signmeasong-frontend)
 
 ## :clipboard: Descrição
 
