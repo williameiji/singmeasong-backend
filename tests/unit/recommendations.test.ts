@@ -1,9 +1,7 @@
 import { recommendationService } from "../../src/services/recommendationsService";
 import { recommendationRepository } from "../../src/repositories/recommendationRepository";
 import { recommendationFactory } from "../factories/recommendationFactory";
-import { Console, log } from "console";
-import * as errorUtils from "../../src/utils/errorUtils";
-import { rejects } from "assert";
+import { Console } from "console";
 
 beforeEach(async () => {
 	jest.resetAllMocks();
