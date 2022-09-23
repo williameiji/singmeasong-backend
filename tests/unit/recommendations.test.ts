@@ -1,7 +1,7 @@
 import { recommendationService } from "../../src/services/recommendationsService";
 import { recommendationRepository } from "../../src/repositories/recommendationRepository";
 import { recommendationFactory } from "../factories/recommendationFactory";
-import { Console } from "console";
+import { Console, log } from "console";
 import * as errorUtils from "../../src/utils/errorUtils";
 import { rejects } from "assert";
 
@@ -183,7 +183,38 @@ describe("Recommendation service unit test", () => {
 		);
 	});
 
-	it("test get random recommendation", async () => {
+	it("test getScoreFilter expect 'gt'", async () => {
+		const RANDOM = 0.5;
+
+		const filter = recommendationService.getScoreFilter(RANDOM);
+
+		expect(filter).toBe("gt");
+	});
+
+	it("test getScoreFilter expect 'lte'", async () => {
+		const RANDOM = 0.8;
+
+		const filter = recommendationService.getScoreFilter(RANDOM);
+
+		expect(filter).toBe("lte");
+	});
+
+	it("test get random recommendation 'gt'", async () => {
+		const getRecommendations = jest
+			.spyOn(recommendationRepository, "findAll")
+			.mockResolvedValueOnce([
+				{ id: 1, name: "teste", youtubeLink: "teste", score: 10 },
+			]);
+
+		jest.spyOn(recommendationService, "getScoreFilter").mockReturnValue("gt");
+
+		const getRandom = await recommendationService.getRandom();
+
+		expect(getRecommendations).toHaveBeenCalled();
+		expect(getRandom).toBeInstanceOf(Object);
+	});
+
+	it("test get random recommendation 'lte'", async () => {
 		const getRecommendations = jest
 			.spyOn(recommendationRepository, "findAll")
 			.mockResolvedValueOnce([

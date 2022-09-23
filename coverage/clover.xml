@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1663936241324" clover="3.2.0">
-  <project timestamp="1663936241324" name="All files">
-    <metrics statements="35" coveredstatements="34" conditionals="6" coveredconditionals="6" methods="9" coveredmethods="9" elements="50" coveredelements="49" complexity="0" loc="35" ncloc="35" packages="2" files="2" classes="2"/>
+<coverage generated="1663937941368" clover="3.2.0">
+  <project timestamp="1663937941368" name="All files">
+    <metrics statements="35" coveredstatements="35" conditionals="6" coveredconditionals="6" methods="9" coveredmethods="9" elements="50" coveredelements="50" complexity="0" loc="35" ncloc="35" packages="2" files="2" classes="2"/>
     <package name="src">
       <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="database.ts" path="/home/eiji/Projetos_Driven/Projetos_Fullstack/Projeto_21/projeto21-signmeasong-backend/src/database.ts">
@@ -12,9 +12,9 @@
       </file>
     </package>
     <package name="src.services">
-      <metrics statements="32" coveredstatements="31" conditionals="6" coveredconditionals="6" methods="9" coveredmethods="9"/>
+      <metrics statements="32" coveredstatements="32" conditionals="6" coveredconditionals="6" methods="9" coveredmethods="9"/>
       <file name="recommendationsService.ts" path="/home/eiji/Projetos_Driven/Projetos_Fullstack/Projeto_21/projeto21-signmeasong-backend/src/services/recommendationsService.ts">
-        <metrics statements="32" coveredstatements="31" conditionals="6" coveredconditionals="6" methods="9" coveredmethods="9"/>
+        <metrics statements="32" coveredstatements="32" conditionals="6" coveredconditionals="6" methods="9" coveredmethods="9"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="8" count="2" type="stmt"/>
@@ -32,20 +32,20 @@
         <line num="40" count="3" type="stmt"/>
         <line num="44" count="1" type="stmt"/>
         <line num="48" count="1" type="stmt"/>
-        <line num="52" count="2" type="stmt"/>
-        <line num="53" count="2" type="stmt"/>
-        <line num="55" count="2" type="stmt"/>
-        <line num="57" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="52" count="3" type="stmt"/>
+        <line num="53" count="3" type="stmt"/>
+        <line num="55" count="3" type="stmt"/>
+        <line num="57" count="3" type="cond" truecount="1" falsecount="0"/>
         <line num="58" count="1" type="stmt"/>
-        <line num="61" count="1" type="stmt"/>
-        <line num="62" count="1" type="stmt"/>
-        <line num="66" count="2" type="stmt"/>
-        <line num="71" count="2" type="cond" truecount="1" falsecount="0"/>
-        <line num="72" count="1" type="stmt"/>
+        <line num="61" count="2" type="stmt"/>
+        <line num="62" count="2" type="stmt"/>
+        <line num="66" count="3" type="stmt"/>
+        <line num="71" count="3" type="cond" truecount="1" falsecount="0"/>
+        <line num="72" count="2" type="stmt"/>
         <line num="75" count="1" type="stmt"/>
-        <line num="79" count="2" type="cond" truecount="1" falsecount="0"/>
-        <line num="80" count="2" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
+        <line num="79" count="5" type="cond" truecount="1" falsecount="0"/>
+        <line num="80" count="3" type="stmt"/>
+        <line num="83" count="2" type="stmt"/>
         <line num="86" count="1" type="stmt"/>
       </file>
     </package>
