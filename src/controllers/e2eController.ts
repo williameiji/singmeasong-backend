@@ -6,3 +6,9 @@ export async function truncate(req: Request, res: Response) {
 
 	res.sendStatus(202);
 }
+
+export async function createTopRecommendations(req: Request, res: Response) {
+	await e2eService.createTopRecommendations();
+
+	res.sendStatus(200);
+}
