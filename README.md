@@ -1,6 +1,6 @@
 # <p align = "center"> SingMeASong Backend </p>
 
-Check project frontend [here](https://github.com/williameiji/repo-provas-frontend)
+Check project frontend [here](https://github.com/williameiji/signmeasong-frontend)
 
 ## :clipboard: Descrição
 
@@ -74,7 +74,7 @@ This project was started with the [Express](https://www.npmjs.com/package/expres
 First, clone this repository on your machine:
 
 ```
-git clone https://github.com/williameiji/singmeasongo-backend
+git clone https://github.com/williameiji/singmeasong-backend
 ```
 
 Then, inside the folder, run the following command to install the dependencies.
