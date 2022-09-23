@@ -3,11 +3,10 @@ import { recommendationRepository } from "../../src/repositories/recommendationR
 import { recommendationFactory } from "../factories/recommendationFactory";
 import { Console } from "console";
 import * as errorUtils from "../../src/utils/errorUtils";
-import { Recommendation } from "@prisma/client";
-import { deleteAllData } from "../factories/scenarioFactory";
+import { rejects } from "assert";
 
 beforeEach(async () => {
-	await deleteAllData();
+	jest.resetAllMocks();
 	jest.clearAllMocks();
 });
 
@@ -39,36 +38,15 @@ describe("Recommendation service unit test", () => {
 			.spyOn(recommendationRepository, "findByName")
 			.mockResolvedValueOnce({ id: 10, ...recommendation, score: 10 });
 
-		jest
-			.spyOn(recommendationRepository, "create")
-			.mockImplementationOnce(async () => {});
+		const error = recommendationService.insert(recommendation);
 
-		jest.spyOn(errorUtils, "conflictError").mockReturnValue({
+		expect(error).rejects.toEqual({
 			type: "conflict",
 			message: "Recommendations names must be unique",
 		});
-
-		try {
-			await recommendationService.insert(recommendation);
-		} catch (error) {
-			expect(error.message).toBe("Recommendations names must be unique");
-		}
 	});
 
 	it("test upvote", async () => {
-		jest
-			.spyOn(recommendationService, "getById")
-			.mockImplementationOnce(async (params) => {
-				if (params === 1) {
-					return {
-						id: 1,
-						name: "teste",
-						youtubeLink: "teste",
-						score: 10,
-					};
-				}
-			});
-
 		const find = jest
 			.spyOn(recommendationRepository, "find")
 			.mockResolvedValueOnce({
@@ -93,44 +71,23 @@ describe("Recommendation service unit test", () => {
 	});
 
 	it("test upvote invalid ID", async () => {
-		jest
-			.spyOn(recommendationService, "getById")
-			.mockImplementationOnce(async (params) => {
-				if (params === 1) {
-					return null;
-				}
-			});
-
 		jest.spyOn(recommendationRepository, "find").mockResolvedValueOnce(null);
-
-		jest
-			.spyOn(errorUtils, "notFoundError")
-			.mockReturnValue({ type: "not_found", message: "" });
 
 		const ID = 1;
 
-		try {
-			await recommendationService.upvote(ID);
-		} catch (error) {
-			expect(error.type).toBe("not_found");
-		}
+		const error = recommendationService.upvote(ID);
+
+		expect(error).rejects.toEqual({ type: "not_found", message: "" });
 	});
 
 	it("test downvote", async () => {
-		jest.spyOn(recommendationService, "getById").mockResolvedValueOnce({
-			id: 1,
-			name: "teste",
-			youtubeLink: "teste",
-			score: 10,
-		});
-
 		const find = jest
 			.spyOn(recommendationRepository, "find")
 			.mockResolvedValueOnce({
 				id: 1,
 				name: "teste",
 				youtubeLink: "teste",
-				score: 10,
+				score: 5,
 			});
 
 		const update = jest
@@ -151,31 +108,16 @@ describe("Recommendation service unit test", () => {
 	});
 
 	it("test downvote invalid ID", async () => {
-		jest.spyOn(recommendationService, "getById").mockResolvedValueOnce(null);
-
 		jest.spyOn(recommendationRepository, "find").mockResolvedValueOnce(null);
-
-		jest
-			.spyOn(errorUtils, "notFoundError")
-			.mockReturnValue({ type: "not_found", message: "" });
 
 		const ID = 1;
 
-		try {
-			await recommendationService.downvote(ID);
-		} catch (error) {
-			expect(error.type).toBe("not_found");
-		}
+		const error = recommendationService.downvote(ID);
+
+		expect(error).rejects.toEqual({ type: "not_found", message: "" });
 	});
 
 	it("test if deletes downvoted -5", async () => {
-		jest.spyOn(recommendationService, "getById").mockResolvedValueOnce({
-			id: 1,
-			name: "teste",
-			youtubeLink: "teste",
-			score: -5,
-		});
-
 		const find = jest
 			.spyOn(recommendationRepository, "find")
 			.mockResolvedValueOnce({
@@ -242,22 +184,7 @@ describe("Recommendation service unit test", () => {
 	});
 
 	it("test get random recommendation", async () => {
-		jest
-			.spyOn(recommendationService, "getScoreFilter")
-			.mockImplementationOnce((params) => {
-				if (params < 0.7) {
-					return "gt";
-				}
-
-				return "lte";
-			});
-		jest
-			.spyOn(recommendationService, "getByScore")
-			.mockImplementationOnce(async (params) => {
-				return [{ id: 1, name: "teste", youtubeLink: "teste", score: 10 }];
-			});
-
-		jest
+		const getRecommendations = jest
 			.spyOn(recommendationRepository, "findAll")
 			.mockResolvedValueOnce([
 				{ id: 1, name: "teste", youtubeLink: "teste", score: 10 },
@@ -265,66 +192,15 @@ describe("Recommendation service unit test", () => {
 
 		const getRandom = await recommendationService.getRandom();
 
+		expect(getRecommendations).toHaveBeenCalled();
 		expect(getRandom).toBeInstanceOf(Object);
 	});
 
 	it("test get random recommendation error", async () => {
-		jest
-			.spyOn(recommendationService, "getScoreFilter")
-			.mockImplementationOnce((params) => {
-				if (params < 0.7) {
-					return "gt";
-				}
+		jest.spyOn(recommendationRepository, "findAll").mockResolvedValue([]);
 
-				return "lte";
-			});
-		jest
-			.spyOn(recommendationService, "getByScore")
-			.mockImplementationOnce(async (params) => {
-				return [];
-			});
+		const error = recommendationService.getRandom();
 
-		jest.spyOn(recommendationRepository, "findAll").mockResolvedValueOnce([]);
-
-		jest
-			.spyOn(errorUtils, "notFoundError")
-			.mockReturnValue({ type: "not_found", message: "" });
-
-		try {
-			await recommendationService.getRandom();
-		} catch (error) {
-			expect(error.type).toBe("not_found");
-		}
-	});
-
-	it("test getByScore with params 'gt'", async () => {
-		jest
-			.spyOn(recommendationRepository, "findAll")
-			.mockResolvedValueOnce([
-				{ id: 1, name: "teste", youtubeLink: "teste", score: 11 },
-			]);
-
-		const FILTER = "gt";
-
-		const recommendation = await recommendationService.getByScore(FILTER);
-
-		expect(recommendation).toBeInstanceOf(Array);
-		expect(recommendation.length).toBeGreaterThan(0);
-	});
-
-	it("test getScoreFilter expect 'gt'", () => {
-		const RANDOM = 0.5;
-
-		const filter = recommendationService.getScoreFilter(RANDOM);
-
-		expect(filter).toBe("gt");
-	});
-
-	it("test getScoreFilter expect 'lte'", () => {
-		const RANDOM = 0.8;
-
-		const filter = recommendationService.getScoreFilter(RANDOM);
-
-		expect(filter).toBe("lte");
+		expect(error).rejects.toEqual({ type: "not_found", message: "" });
 	});
 });
